@@ -113,7 +113,7 @@ export function RegisterDialog({
                   {dataCol.name}:
                 </label>
                 <Input
-                  value={register[dataCol.name]}
+                  value={register[dataCol.name] ?? ""}
                   onChange={(e) =>
                     setRegister({ ...register, [dataCol.name]: e.target.value })
                   }

@@ -3,6 +3,7 @@ import { Inter } from "next/font/google"
 
 import { TableContextProvider } from "./contexts/TableContext"
 import "./styles/globals.css"
+import { EditorContextProvider } from "./contexts/EditorContext"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -19,7 +20,9 @@ export default function RootLayout({
   return (
     <html lang="pt-br">
       <body className={inter.className}>
-        <TableContextProvider>{children}</TableContextProvider>
+        <TableContextProvider>
+          <EditorContextProvider>{children}</EditorContextProvider>
+        </TableContextProvider>
       </body>
     </html>
   )
