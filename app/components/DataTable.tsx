@@ -8,6 +8,7 @@ import {
 } from "@tanstack/react-table"
 
 import { Columns, Pencil, Trash, X } from "lucide-react"
+import { useEditorContext } from "../contexts/EditorContext"
 import { useTableContext } from "../contexts/TableContext"
 import { TableType } from "../types/table"
 import { RegisterDialog } from "./RegisterDialog"
@@ -43,6 +44,7 @@ export function DataTable<TData, TValue>({
   })
 
   const { setTables } = useTableContext()
+  const { editor } = useEditorContext()
 
   function deleteTable() {
     const tables = JSON.parse(
@@ -55,6 +57,8 @@ export function DataTable<TData, TValue>({
 
     setTables(filteredTables)
     localStorage.setItem("@sql-algebra:tables", JSON.stringify(filteredTables))
+
+    editor?.setEditable(filteredTables.length > 0)
   }
 
   function editTable() {

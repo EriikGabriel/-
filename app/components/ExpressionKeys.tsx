@@ -1,6 +1,5 @@
-import { Keys } from "./Keys"
 import { __CHR } from "../constants/text"
-import { useEditorContext } from "../contexts/EditorContext"
+import { Keys } from "./Keys"
 
 export function ExpressionKeys() {
   return (

@@ -1,7 +1,7 @@
 "use client"
 
-import Placeholder from "@tiptap/extension-placeholder"
 import HardBreak from "@tiptap/extension-hard-break"
+import Placeholder from "@tiptap/extension-placeholder"
 
 import Subscript from "@tiptap/extension-subscript"
 import Superscript from "@tiptap/extension-superscript"

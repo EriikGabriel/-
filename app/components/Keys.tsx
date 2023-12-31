@@ -1,15 +1,15 @@
 "use client"
 
 import { ReactNode } from "react"
+import { useEditorContext } from "../contexts/EditorContext"
+import { cn } from "../lib/utils"
 import { Button } from "./ui/button"
 import {
   Tooltip,
   TooltipContent,
-  TooltipTrigger,
   TooltipProvider,
+  TooltipTrigger,
 } from "./ui/tooltip"
-import { cn } from "../lib/utils"
-import { useEditorContext } from "../contexts/EditorContext"
 
 interface KeysProps extends React.HTMLAttributes<HTMLDivElement> {
   children: ReactNode
@@ -43,6 +43,7 @@ export function Keys({ children, name, desc, script, className }: KeysProps) {
             size="sm"
             onClick={() => insertOperation(script ?? "")}
             className={cn("text-sm w-10", className)}
+            disabled={!editor?.isEditable}
           >
             {children}
           </Button>

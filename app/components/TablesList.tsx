@@ -1,6 +1,6 @@
 "use client"
 
-import { KeyboardEvent, useEffect, useRef, useState } from "react"
+import { useEffect, useRef } from "react"
 
 import { PlusIcon } from "lucide-react"
 import { useTableContext } from "../contexts/TableContext"
@@ -12,19 +12,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs"
 
 export function TablesList() {
   const tabsRef = useRef<HTMLDivElement>(null)
-  const [tabs, setTabs] = useState<string[]>([])
-  const [tabName, setTabName] = useState("")
 
   const { setTables, tables } = useTableContext()
-
-  function handleCreateTable(event: KeyboardEvent<HTMLInputElement>) {
-    const tabName = event.currentTarget.value
-
-    if (event.key !== "Enter" || !tabName || tabs.includes(tabName)) return
-
-    setTabs([...tabs, tabName])
-    setTabName("")
-  }
 
   useEffect(() => {
     const storageTables = JSON.parse(

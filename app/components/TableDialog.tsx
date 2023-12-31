@@ -1,12 +1,13 @@
 "use client"
 
 import { PlusIcon } from "@radix-ui/react-icons"
-import { FormEvent, ReactNode, useEffect, useState } from "react"
+import { FormEvent, ReactNode, useState } from "react"
 
 import { X } from "lucide-react"
 import { ColumnType, TableType } from "../types/table"
 
 import { DialogClose } from "@radix-ui/react-dialog"
+import { useEditorContext } from "../contexts/EditorContext"
 import { useTableContext } from "../contexts/TableContext"
 import { Button } from "./ui/button"
 import { Checkbox } from "./ui/checkbox"
@@ -43,6 +44,7 @@ export function TableDialog({ children, editTableName }: TableDialogProps) {
   const [typeIsChanged, setTypeIsChanged] = useState(false)
 
   const { setTables, tables } = useTableContext()
+  const { editor } = useEditorContext()
 
   function setFields() {
     if (!editTableName) return
@@ -76,15 +78,16 @@ export function TableDialog({ children, editTableName }: TableDialogProps) {
   function createTable(e: FormEvent) {
     e.preventDefault()
 
-    setTables([...tables, { name: tableName, columns, data: [] }])
+    const newTables = [...tables, { name: tableName, columns, data: [] }]
 
-    localStorage.setItem(
-      "@sql-algebra:tables",
-      JSON.stringify([...tables, { name: tableName, columns, data: [] }])
-    )
+    setTables(newTables)
+
+    localStorage.setItem("@sql-algebra:tables", JSON.stringify(newTables))
 
     setTableName("")
     setColumns([])
+
+    editor?.setEditable(newTables.length > 0)
   }
 
   function editTable(e: FormEvent) {
