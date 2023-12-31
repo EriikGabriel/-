@@ -1,9 +1,15 @@
+"use client"
+
 import { __CHR } from "../constants/text"
+import { useEditorContext } from "../contexts/EditorContext"
+import { cn } from "../lib/utils"
 import { Keys } from "./Keys"
 
 export function ExpressionKeys() {
+  const { editable } = useEditorContext()
+
   return (
-    <div className="flex flex-col gap-3">
+    <div className={cn(editable ? "flex" : "hidden", "flex-col gap-3")}>
       <div className="flex gap-3">
         <Keys
           name="Projeção"

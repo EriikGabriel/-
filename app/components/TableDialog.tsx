@@ -44,7 +44,7 @@ export function TableDialog({ children, editTableName }: TableDialogProps) {
   const [typeIsChanged, setTypeIsChanged] = useState(false)
 
   const { setTables, tables } = useTableContext()
-  const { editor } = useEditorContext()
+  const { setEditable } = useEditorContext()
 
   function setFields() {
     if (!editTableName) return
@@ -87,7 +87,7 @@ export function TableDialog({ children, editTableName }: TableDialogProps) {
     setTableName("")
     setColumns([])
 
-    editor?.setEditable(newTables.length > 0)
+    setEditable(newTables.length > 0)
   }
 
   function editTable(e: FormEvent) {

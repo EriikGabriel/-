@@ -44,7 +44,7 @@ export function DataTable<TData, TValue>({
   })
 
   const { setTables } = useTableContext()
-  const { editor } = useEditorContext()
+  const { setEditable } = useEditorContext()
 
   function deleteTable() {
     const tables = JSON.parse(
@@ -58,7 +58,7 @@ export function DataTable<TData, TValue>({
     setTables(filteredTables)
     localStorage.setItem("@sql-algebra:tables", JSON.stringify(filteredTables))
 
-    editor?.setEditable(filteredTables.length > 0)
+    setEditable(filteredTables.length > 0)
   }
 
   function editTable() {
@@ -134,7 +134,9 @@ export function DataTable<TData, TValue>({
                     </TableHead>
                   )
                 })}
-                <TableHead key="actions" />
+                {table.getRowModel().rows?.length > 0 && (
+                  <TableHead key="actions" />
+                )}
               </TableRow>
             ))}
           </TableHeader>
@@ -182,14 +184,13 @@ export function DataTable<TData, TValue>({
                 </TableRow>
               ))
             ) : (
-              <TableRow>
+              <TableRow className="w-full">
                 <TableCell
                   colSpan={columns.length}
-                  className="h-24 text-center"
+                  className="h-24 w-full text-center"
                 >
                   No results.
                 </TableCell>
-                <TableCell key="actions" />
               </TableRow>
             )}
           </TableBody>

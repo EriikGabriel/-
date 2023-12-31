@@ -24,6 +24,8 @@ interface EditorContextProviderProps {
 export type EditorContextType = {
   editor: Editor | null
   setEditor: Dispatch<SetStateAction<Editor | null>>
+  editable: boolean
+  setEditable: Dispatch<SetStateAction<boolean>>
 }
 
 const EditorContext = createContext({} as EditorContextType)
@@ -32,6 +34,7 @@ export function EditorContextProvider({
   children,
 }: EditorContextProviderProps) {
   const [editor, setEditor] = useState<Editor | null>(null)
+  const [editable, setEditable] = useState(false)
 
   const editorConfig = useEditor({
     extensions: [
@@ -59,7 +62,9 @@ export function EditorContextProvider({
   useEffect(() => setEditor(editorConfig), [editorConfig])
 
   return (
-    <EditorContext.Provider value={{ setEditor, editor }}>
+    <EditorContext.Provider
+      value={{ setEditor, editor, editable, setEditable }}
+    >
       {children}
     </EditorContext.Provider>
   )

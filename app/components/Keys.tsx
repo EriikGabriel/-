@@ -19,7 +19,7 @@ interface KeysProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 export function Keys({ children, name, desc, script, className }: KeysProps) {
-  const { editor } = useEditorContext()
+  const { editor, editable } = useEditorContext()
 
   function insertOperation(script: string) {
     if (!editor) return
@@ -43,7 +43,7 @@ export function Keys({ children, name, desc, script, className }: KeysProps) {
             size="sm"
             onClick={() => insertOperation(script ?? "")}
             className={cn("text-sm w-10", className)}
-            disabled={!editor?.isEditable}
+            disabled={!editable}
           >
             {children}
           </Button>

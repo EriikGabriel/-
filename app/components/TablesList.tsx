@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react"
 
-import { PlusIcon } from "lucide-react"
+import { PlusIcon, Table } from "lucide-react"
 import { useTableContext } from "../contexts/TableContext"
 import { createColumns } from "./Columns"
 import { DataTable } from "./DataTable"
@@ -41,7 +41,14 @@ export function TablesList() {
           </Button>
         </TableDialog>
       </TabsList>
-      <TabsContent value="default">Crie uma nova tabela</TabsContent>
+      <TabsContent value="default">
+        <div className="flex flex-col items-center justify-center w-full h-64">
+          <Table className="h-16 w-16 text-muted-foreground" />
+          <p className="text-gray-500 text-center mt-4 select-none">
+            Selecione uma tabela ou crie uma nova.
+          </p>
+        </div>
+      </TabsContent>
 
       {tables.map((tab) => (
         <TabsContent value={tab.name} key={tab.name}>

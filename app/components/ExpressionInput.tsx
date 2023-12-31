@@ -10,7 +10,7 @@ import { TableType } from "../types/table"
 const firaCode = Fira_Code({ subsets: ["latin"] })
 
 export function ExpressionInput() {
-  const { editor } = useEditorContext()
+  const { editor, editable, setEditable } = useEditorContext()
 
   useEffect(() => {
     if (!editor) return
@@ -18,8 +18,8 @@ export function ExpressionInput() {
     const getItem = localStorage.getItem("@sql-algebra:tables") || "[]"
     const stored = JSON.parse(getItem) as TableType[]
 
-    editor.setEditable(stored.length > 0)
-  }, [editor])
+    setEditable(stored.length > 0)
+  }, [setEditable, editor])
 
   return (
     <div>
@@ -27,7 +27,7 @@ export function ExpressionInput() {
         editor={editor}
         className={cn(
           firaCode.className,
-          !editor?.isEditable && "cursor-not-allowed"
+          !editable && "hidden cursor-not-allowed"
         )}
       />
     </div>
