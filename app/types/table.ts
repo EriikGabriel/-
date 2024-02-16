@@ -11,3 +11,5 @@ export type TableType = {
   columns: ColumnType[]
   data: { [key: string]: string }[]
 }
+
+export type ResultTableType = Omit<TableType, "columns">

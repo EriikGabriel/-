@@ -38,7 +38,7 @@ export function EditorContextProvider({
 
   const editorConfig = useEditor({
     extensions: [
-      StarterKit,
+      StarterKit.configure({ hardBreak: false }),
       Placeholder.configure({ placeholder: "Digite a expressão..." }),
       Subscript,
       Superscript,
@@ -46,6 +46,7 @@ export function EditorContextProvider({
         addKeyboardShortcuts() {
           return {
             Enter: () => this.editor.commands.setHardBreak(),
+            "Shift-Enter": () => this.editor.commands.setHardBreak(),
           }
         },
       }),

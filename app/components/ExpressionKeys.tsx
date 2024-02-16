@@ -10,7 +10,7 @@ export function ExpressionKeys() {
 
   return (
     <div className={cn(editable ? "flex" : "hidden", "flex-col gap-3")}>
-      <div className="flex gap-3">
+      <div className="flex flex-wrap gap-3">
         <Keys
           name="Projeção"
           desc="π lista_atributos(relação)"
@@ -90,7 +90,7 @@ export function ExpressionKeys() {
         </Keys>
       </div>
 
-      <div className="flex gap-3">
+      <div className="flex flex-wrap gap-3">
         <Keys name="Igualdade" script={`=`}>
           =
         </Keys>
