@@ -9,8 +9,8 @@ export function ExpressionKeys() {
   const { editable } = useEditorContext()
 
   return (
-    <div className={cn(editable ? "flex" : "hidden", "flex-col gap-3")}>
-      <div className="flex flex-wrap gap-3">
+    <div className={cn(editable ? "flex" : "hidden", "w-full justify-center")}>
+      <div className="grid grid-rows-2 grid-flow-col-dense gap-3">
         <Keys
           name="Projeção"
           desc="π lista_atributos(relação)"
@@ -39,10 +39,20 @@ export function ExpressionKeys() {
         >
           ρ
         </Keys>
-        <Keys name="União" desc="relação 1 ∪ relação 2" script={`∪`}>
+        <Keys
+          name="União"
+          desc="relação 1 ∪ relação 2"
+          script={`∪`}
+          className="text-2xl"
+        >
           ∪
         </Keys>
-        <Keys name="Interseção" desc="relação 1 ∩ relação 2" script={`∩`}>
+        <Keys
+          name="Interseção"
+          desc="relação 1 ∩ relação 2"
+          script={`∩`}
+          className="text-2xl"
+        >
           ∩
         </Keys>
         <Keys name="Diferença" desc="relação 1 − relação 2" script={`−`}>
@@ -88,9 +98,6 @@ export function ExpressionKeys() {
         <Keys name="Parenteses Direito" script={`)`}>
           )
         </Keys>
-      </div>
-
-      <div className="flex flex-wrap gap-3">
         <Keys name="Igualdade" script={`=`}>
           =
         </Keys>

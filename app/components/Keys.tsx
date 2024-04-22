@@ -40,9 +40,8 @@ export function Keys({ children, name, desc, script, className }: KeysProps) {
         <TooltipTrigger asChild>
           <Button
             variant="outline"
-            size="sm"
             onClick={() => insertOperation(script ?? "")}
-            className={cn("text-sm w-10", className)}
+            className={cn("text-md w-10", className)}
             disabled={!editable}
           >
             {children}
