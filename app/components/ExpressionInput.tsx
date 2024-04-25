@@ -6,6 +6,7 @@ import { useEffect } from "react"
 import { useEditorContext } from "../contexts/EditorContext"
 import { cn } from "../lib/utils"
 import { TableType } from "../types/table"
+import { ExpressionButton } from "./ExpressionButton"
 
 const firaCode = Fira_Code({ subsets: ["latin"] })
 
@@ -22,14 +23,16 @@ export function ExpressionInput() {
   }, [setEditable, editor])
 
   return (
-    <div>
+    <div className="flex gap-3">
       <EditorContent
         editor={editor}
         className={cn(
           firaCode.className,
+          "w-full",
           !editable && "hidden cursor-not-allowed"
         )}
       />
+      <ExpressionButton />
     </div>
   )
 }

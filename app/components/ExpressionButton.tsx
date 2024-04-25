@@ -1,36 +1,65 @@
 "use client"
 
+import { DatabaseZap } from "lucide-react"
 import XRegExp from "xregexp"
 import { useEditorContext } from "../contexts/EditorContext"
 import { useTableContext } from "../contexts/TableContext"
 import { cn } from "../lib/utils"
 import { ResultTableType } from "../types/table"
 import { Button } from "./ui/button"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "./ui/tooltip"
+
+type OperationType = {
+  op: string
+  sub?: string
+  relation: string
+}
 
 export function ExpressionButton() {
   const { editor, editable } = useEditorContext()
   const { tables } = useTableContext()
 
-  function executeOperation(op: string, a: string, b: string) {}
+  function executeOperation(op: string, sub: string, relation: string) {}
 
-  function parenthesisInternal(str: string) {
-    const matches = XRegExp.matchRecursive(str, "\\(", "\\)", "g", {
-      valueNames: [null, null, "match", null],
-    })
+  function internalOperation(str: string) {
+    let internal = XRegExp.matchRecursive(
+      str,
+      "((π|σ)(.*?)\\(|\\()",
+      "\\)",
+      "g",
+      { valueNames: [null, "left", "match", null] }
+    )
+    const response: OperationType[] = []
 
-    matches.forEach((match) => {
-      const { value } = match
+    const transformedRes: OperationType[] = internal.reduce<OperationType[]>(
+      (acc, current) => {
+        if (current.name === "left") {
+          const regexSub = /(?<=<sub>).*?(?=<\/sub>)/g
+          const matches = current.value.match(regexSub) ?? []
 
-      let hasParenthesis = XRegExp.test(value, "\\(|\\)")
+          acc.push({ op: current.value[0], sub: matches[0], relation: "" })
+        } else if (current.name === "match" && acc[acc.length - 1]) {
+          acc[acc.length - 1].relation = current.value
+        }
+        return acc
+      },
+      []
+    )
 
-      while (hasParenthesis) {
-        const matches = XRegExp.matchRecursive(value, "\\(", "\\)", "g", {
-          valueNames: [null, null, "match", null],
-        })
-      }
-    })
+    const internalVal = internal
+      .map((element) => (element.name === "match" ? element.value : ""))
+      .filter((e) => e.length > 0)
 
-    console.warn(matches)
+    const hasParenthesis = internalVal.some((e) => /\(.*?\)/.test(e))
+    if (!hasParenthesis) return transformedRes
+
+    internalVal.forEach((item) => response.push(...internalOperation(item)))
+    return response
   }
 
   function executeQueries() {
@@ -43,17 +72,32 @@ export function ExpressionButton() {
     const resultTable = {} as ResultTableType
 
     HTMLQueries.forEach((query) => {
-      console.warn(parenthesisInternal(query))
+      const operations = internalOperation(query)
+
+      console.log(operations)
+
+      operations.forEach(({ op, sub, relation }) => {
+        executeOperation(op, sub ?? "", relation)
+      })
     })
   }
 
   return (
-    <Button
-      className={cn(editable ? "flex" : "hidden", "select-none")}
-      onClick={executeQueries}
-      disabled={!!!editor?.getText().length ?? true}
-    >
-      Executar consulta
-    </Button>
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Button
+            className={cn(editable ? "flex" : "hidden", "select-none h-full ")}
+            onClick={executeQueries}
+            disabled={!!!editor?.getText().length ?? true}
+          >
+            <DatabaseZap />
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent>
+          <p>Executar consulta</p>
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
   )
 }
