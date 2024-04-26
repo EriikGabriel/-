@@ -1,5 +1,6 @@
 import { ExpressionInput } from "./components/ExpressionInput"
 import { ExpressionKeys } from "./components/ExpressionKeys"
+import { ResultTable } from "./components/ResultTable"
 import { TablesList } from "./components/TablesList"
 
 export default function Home() {
@@ -9,6 +10,7 @@ export default function Home() {
         <ExpressionInput />
         <ExpressionKeys />
         <TablesList />
+        <ResultTable />
       </div>
     </main>
   )

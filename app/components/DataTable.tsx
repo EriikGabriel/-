@@ -10,6 +10,7 @@ import {
 import { Columns, Pencil, Trash, X } from "lucide-react"
 import { useEditorContext } from "../contexts/EditorContext"
 import { useTableContext } from "../contexts/TableContext"
+import { cn } from "../lib/utils"
 import { TableType } from "../types/table"
 import { RegisterDialog } from "./RegisterDialog"
 import { TableDialog } from "./TableDialog"
@@ -29,6 +30,8 @@ interface DataTableProps<TData, TValue> {
   dataColumns: TableType["columns"]
   columns: ColumnDef<TData, TValue>[]
   data?: TData[]
+  onlyRead?: boolean
+  className?: string
 }
 
 export function DataTable<TData, TValue>({
@@ -36,6 +39,8 @@ export function DataTable<TData, TValue>({
   dataColumns,
   columns,
   data = [],
+  onlyRead = false,
+  className,
 }: DataTableProps<TData, TValue>) {
   const table = useReactTable({
     data,
@@ -88,37 +93,39 @@ export function DataTable<TData, TValue>({
 
   return (
     <div className="w-full">
-      <div className="flex items-center py-4 justify-between">
-        <RegisterDialog tableName={tableName} dataColumns={dataColumns}>
-          <Button>Novo registro</Button>
-        </RegisterDialog>
-        <div className="flex gap-3">
-          <TableDialog editTableName={tableName}>
-            <Button
-              variant="outline"
-              size="icon"
-              className="mb-4 mt-2"
-              onClick={editTable}
-            >
-              <Columns className="h-4 w-4" />
-            </Button>
-          </TableDialog>
+      {!onlyRead && (
+        <div className="flex items-center py-4 justify-between">
+          <RegisterDialog tableName={tableName} dataColumns={dataColumns}>
+            <Button>Novo registro</Button>
+          </RegisterDialog>
+          <div className="flex gap-3">
+            <TableDialog editTableName={tableName}>
+              <Button
+                variant="outline"
+                size="icon"
+                className="mb-4 mt-2"
+                onClick={editTable}
+              >
+                <Columns className="h-4 w-4" />
+              </Button>
+            </TableDialog>
 
-          <Warning
-            title="Você tem certeza?"
-            description={`Você não poderá desfazer essa ação. Toda a sua tabela "${tableName}" será apagada.`}
-            cancel={{ text: "Cancelar" }}
-            proceed={{ text: "Apagar", action: deleteTable }}
-          >
-            <Button variant="destructive" size="icon" className="mb-4 mt-2">
-              <Trash className="h-4 w-4" />
-            </Button>
-          </Warning>
+            <Warning
+              title="Você tem certeza?"
+              description={`Você não poderá desfazer essa ação. Toda a sua tabela "${tableName}" será apagada.`}
+              cancel={{ text: "Cancelar" }}
+              proceed={{ text: "Apagar", action: deleteTable }}
+            >
+              <Button variant="destructive" size="icon" className="mb-4 mt-2">
+                <Trash className="h-4 w-4" />
+              </Button>
+            </Warning>
+          </div>
         </div>
-      </div>
+      )}
 
       <div className="rounded-md border">
-        <Table>
+        <Table className={cn("rounded", className)}>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
@@ -134,7 +141,7 @@ export function DataTable<TData, TValue>({
                     </TableHead>
                   )
                 })}
-                {table.getRowModel().rows?.length > 0 && (
+                {table.getRowModel().rows?.length > 0 && !onlyRead && (
                   <TableHead key="actions" />
                 )}
               </TableRow>
@@ -155,32 +162,34 @@ export function DataTable<TData, TValue>({
                       )}
                     </TableCell>
                   ))}
-                  <TableCell key="actions">
-                    <div className="flex justify-end items-center h-full gap-4 pr-4">
-                      <RegisterDialog
-                        tableName={tableName}
-                        dataColumns={dataColumns}
-                        editRegisterId={i}
-                      >
+                  {!onlyRead && (
+                    <TableCell key="actions">
+                      <div className="flex justify-end items-center h-full gap-4 pr-4">
+                        <RegisterDialog
+                          tableName={tableName}
+                          dataColumns={dataColumns}
+                          editRegisterId={i}
+                        >
+                          <Button
+                            variant="link"
+                            size="icon"
+                            className="w-6 h-6 hover:text-yellow-500"
+                          >
+                            <Pencil className="h-4 w-4" />
+                          </Button>
+                        </RegisterDialog>
+
                         <Button
                           variant="link"
                           size="icon"
-                          className="w-6 h-6 hover:text-yellow-500"
+                          className="w-6 h-6 hover:text-red-500"
+                          onClick={() => deleteRegister(i)}
                         >
-                          <Pencil className="h-4 w-4" />
+                          <X className="h-4 w-4" />
                         </Button>
-                      </RegisterDialog>
-
-                      <Button
-                        variant="link"
-                        size="icon"
-                        className="w-6 h-6 hover:text-red-500"
-                        onClick={() => deleteRegister(i)}
-                      >
-                        <X className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </TableCell>
+                      </div>
+                    </TableCell>
+                  )}
                 </TableRow>
               ))
             ) : (
