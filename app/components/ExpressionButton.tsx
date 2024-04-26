@@ -36,7 +36,8 @@ export function ExpressionButton() {
   }
 
   function projection(columns: string[], relation: string): TableType {
-    const matchingTable = tables.find((table) => table.name === relation)
+    let matchingTable = tables.find((table) => table.name === relation)
+    matchingTable = matchingTable ?? queryTables.history[relation]
 
     if (!matchingTable) {
       throw new Error(`Relation '${relation}' not found in tables`)
@@ -117,15 +118,34 @@ export function ExpressionButton() {
     const HTMLExpression = editor?.getHTML().replaceAll(/\s/g, "") ?? ""
     const HTMLQueries = HTMLExpression.replace(/<\/?p>/g, "").split("<br>")
 
+    let queryIndex = 0
+
     HTMLQueries.forEach((query) => {
-      const operations = internalOperation(query)
+      let operations = internalOperation(query)
 
-      operations.forEach(({ op, sub, relation }, i) => {
-        const queryTable = executeOperation(op, sub ?? "", relation)
+      while (operations.length > 0) {
+        operations = internalOperation(query)
 
-        queryTables.lastQueryTable = queryTable
-        queryTables.history = { ...queryTables.history, [`$${i}`]: queryTable }
-      })
+        operations.forEach(({ op, sub, relation }, i) => {
+          const queryTable = executeOperation(op, sub ?? "", relation)
+
+          queryTables.lastQueryTable = queryTable
+          queryTables.history = {
+            ...queryTables.history,
+            [`!${queryIndex}`]: queryTable,
+          }
+
+          query = query.replaceAll(
+            new RegExp(
+              `${op}<sub>${__CHR}${sub}<\\/sub>\\(${relation}\\)`,
+              "g"
+            ),
+            `!${queryIndex}`
+          )
+
+          queryIndex++
+        })
+      }
     })
 
     setResultTable(queryTables?.lastQueryTable)
