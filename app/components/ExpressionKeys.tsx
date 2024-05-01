@@ -1,8 +1,8 @@
 "use client"
 
-import { __CHR } from "../constants/text"
-import { useEditorContext } from "../contexts/EditorContext"
-import { cn } from "../lib/utils"
+import { __CHR } from "@constants/text"
+import { useEditorContext } from "@contexts/EditorContext"
+import { cn } from "@lib/utils"
 import { Keys } from "./Keys"
 
 export function ExpressionKeys() {

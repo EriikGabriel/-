@@ -2,13 +2,13 @@
 
 import { useEffect, useRef } from "react"
 
+import { useTableContext } from "@contexts/TableContext"
+import { Button } from "@ui/button"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@ui/tabs"
 import { PlusIcon, Table } from "lucide-react"
-import { useTableContext } from "../contexts/TableContext"
 import { createColumns } from "./Columns"
 import { DataTable } from "./DataTable"
 import { TableDialog } from "./TableDialog"
-import { Button } from "./ui/button"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs"
 
 export function TablesList() {
   const tabsRef = useRef<HTMLDivElement>(null)

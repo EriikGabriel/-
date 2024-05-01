@@ -1,15 +1,15 @@
 "use client"
 
-import { ReactNode } from "react"
-import { useEditorContext } from "../contexts/EditorContext"
-import { cn } from "../lib/utils"
-import { Button } from "./ui/button"
+import { useEditorContext } from "@contexts/EditorContext"
+import { cn } from "@lib/utils"
+import { Button } from "@ui/button"
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "./ui/tooltip"
+} from "@ui/tooltip"
+import { ReactNode } from "react"
 
 interface KeysProps extends React.HTMLAttributes<HTMLDivElement> {
   children: ReactNode

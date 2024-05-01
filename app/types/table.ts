@@ -11,3 +11,8 @@ export type TableType = {
   columns: ColumnType[]
   data: { [key: string]: string }[]
 }
+
+export type QueryTableType = {
+  lastQueryTable: TableType
+  history: { [rel: string]: TableType }
+}

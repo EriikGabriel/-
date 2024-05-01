@@ -3,15 +3,15 @@
 import { PlusIcon } from "@radix-ui/react-icons"
 import { FormEvent, ReactNode, useState } from "react"
 
+import { ColumnType, TableType } from "@@types/table"
 import { X } from "lucide-react"
-import { ColumnType, TableType } from "../types/table"
 
+import { useEditorContext } from "@contexts/EditorContext"
+import { useTableContext } from "@contexts/TableContext"
 import { DialogClose } from "@radix-ui/react-dialog"
-import { useEditorContext } from "../contexts/EditorContext"
-import { useTableContext } from "../contexts/TableContext"
-import { Button } from "./ui/button"
-import { Checkbox } from "./ui/checkbox"
-import { ComboBox } from "./ui/combobox"
+import { Button } from "@ui/button"
+import { Checkbox } from "@ui/checkbox"
+import { ComboBox } from "@ui/combobox"
 import {
   Dialog,
   DialogContent,
@@ -19,8 +19,8 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "./ui/dialog"
-import { Input } from "./ui/input"
+} from "@ui/dialog"
+import { Input } from "@ui/input"
 import {
   Table,
   TableBody,
@@ -29,8 +29,8 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "./ui/table"
-import { Warning } from "./ui/warning"
+} from "@ui/table"
+import { Warning } from "@ui/warning"
 
 interface TableDialogProps {
   children: ReactNode

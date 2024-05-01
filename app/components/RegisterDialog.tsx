@@ -1,8 +1,7 @@
-import { FormEvent, ReactNode, useCallback, useEffect, useState } from "react"
-import { useTableContext } from "../contexts/TableContext"
-import { TableType } from "../types/table"
-import { Button } from "./ui/button"
-import { Input } from "./ui/input"
+import { TableType } from "@@types/table"
+import { useTableContext } from "@contexts/TableContext"
+import { Button } from "@ui/button"
+import { Input } from "@ui/input"
 import {
   Sheet,
   SheetClose,
@@ -10,7 +9,8 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "./ui/sheet"
+} from "@ui/sheet"
+import { FormEvent, ReactNode, useEffect, useState } from "react"
 
 interface RegisterDialogProps {
   tableName: string

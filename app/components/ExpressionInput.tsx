@@ -1,11 +1,11 @@
 "use client"
 
+import { TableType } from "@@types/table"
+import { useEditorContext } from "@contexts/EditorContext"
+import { cn } from "@lib/utils"
 import { EditorContent } from "@tiptap/react"
 import { Fira_Code } from "next/font/google"
 import { useEffect } from "react"
-import { useEditorContext } from "../contexts/EditorContext"
-import { cn } from "../lib/utils"
-import { TableType } from "../types/table"
 import { ExpressionButton } from "./ExpressionButton"
 
 const firaCode = Fira_Code({ subsets: ["latin"] })

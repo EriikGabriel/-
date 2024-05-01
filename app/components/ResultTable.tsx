@@ -1,6 +1,6 @@
 "use client"
 
-import { useTableContext } from "../contexts/TableContext"
+import { useTableContext } from "@contexts/TableContext"
 import { createColumns } from "./Columns"
 import { DataTable } from "./DataTable"
 
