@@ -1,6 +1,10 @@
 import { OperationType } from "@@types/operation"
 import { QueryTableType, TableType } from "@@types/table"
-import { leftInternalRegex } from "@constants/operation"
+import {
+  leftInternalRegex,
+  logicalOperations,
+  logicalOperationsMap,
+} from "@constants/operation"
 import { __CHR } from "@constants/text"
 import XRegExp from "xregexp"
 
@@ -41,6 +45,41 @@ export class OperationsUtils {
     )
 
     return { ...matchTable, data: projectedData, columns: projectedColumns }
+  }
+
+  selection(condition: string, relation: string): TableType {
+    const matchTable =
+      this.tables.find((table) => table.name === relation) ??
+      this.queryTables.history[relation]
+
+    if (!matchTable) return { name: "", columns: [], data: [] }
+
+    const selectedData = matchTable.data.filter((row) => {
+      const logicalOpRegex = new RegExp(logicalOperations, "g")
+      const logicalAttrRegex = new RegExp(`\\w+(?=${logicalOperations})`, "g")
+
+      const attributes = condition.match(logicalAttrRegex) ?? []
+
+      let valueCondition = condition
+
+      attributes.forEach((attr) => {
+        valueCondition = valueCondition
+          .replaceAll(attr, `"${row[attr]}"`)
+          .replaceAll(/(?<!=)\=(?!=)/g, "==")
+      })
+
+      valueCondition.match(logicalOpRegex)?.forEach((op) => {
+        valueCondition = valueCondition.replaceAll(op, logicalOperationsMap[op])
+      })
+
+      try {
+        return eval(valueCondition)
+      } catch (e) {
+        return false
+      }
+    })
+
+    return { ...matchTable, data: selectedData }
   }
 
   /*--------------------------*
@@ -97,8 +136,8 @@ export class OperationsUtils {
         const columns = sub.split(",")
         return this.projection(columns, relation)
       case "σ":
-        console.log("Seleção")
-        return { name: "Seleção", columns: [], data: [] }
+        const condition = sub
+        return this.selection(condition, relation)
       default:
         return { name: "", columns: [], data: [] }
     }
