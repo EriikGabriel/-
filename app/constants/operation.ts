@@ -6,6 +6,10 @@ const logicalOperationsMap: { [key: string]: string } = {
   "∧": "&&",
   "∨": "||",
   "¬": "!",
+  ">": ">",
+  "<": "<",
+  "≥": ">=",
+  "≤": "<=",
 }
 const logicalOperations = Object.keys(logicalOperationsMap).join("|")
 
