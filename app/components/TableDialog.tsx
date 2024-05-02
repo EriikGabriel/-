@@ -211,6 +211,7 @@ export function TableDialog({ children, editTableName }: TableDialogProps) {
                           placeholder="Nome da coluna"
                           autoComplete="off"
                           value={column.name}
+                          className="lowercase"
                           onChange={(e) => {
                             column.name = e.target.value
                             setColumns([...columns])
