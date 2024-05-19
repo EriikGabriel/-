@@ -44,6 +44,7 @@ export function ExpressionButton() {
 
     HTMLQueries.forEach((query) => {
       const opUtils = new OperationsUtils(tables, queryTables)
+      const relationAssignment = query.match(/.+(?=←)/g)?.[0]
 
       let operations = opUtils.getInternalOperations(query)
 
@@ -66,6 +67,13 @@ export function ExpressionButton() {
           query = query.replaceAll(subQueryRegex, `!${queryIndex}`)
           queryIndex++
         })
+      }
+
+      if (relationAssignment) {
+        queryTables.history = {
+          ...queryTables.history,
+          [relationAssignment]: queryTables.lastQueryTable,
+        }
       }
     })
 

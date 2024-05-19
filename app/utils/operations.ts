@@ -12,6 +12,7 @@ export class OperationsUtils {
   /*---------------------------*
    |          Construtor       |  
    *---------------------------*/
+
   constructor(
     private tables: TableType[],
     private queryTables: QueryTableType
@@ -23,6 +24,7 @@ export class OperationsUtils {
   /*--------------------------*
    |        Operações         |  
    *--------------------------*/
+
   projection(columns: string[], relation: string): TableType {
     const matchTable =
       this.tables.find((table) => table.name === relation) ??
@@ -131,6 +133,7 @@ export class OperationsUtils {
   }
 
   executeOperation(op: string, sub: string, relation: string): TableType {
+    console.log({ op, sub, relation })
     switch (op) {
       case "π":
         const columns = sub.split(",")
