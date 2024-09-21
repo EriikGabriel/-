@@ -46,15 +46,61 @@ export function ExpressionButton() {
       const opUtils = new OperationsUtils(tables, queryTables)
       const relationAssignment = query.match(/.+(?=←)/g)?.[0]
 
-      let operations = opUtils.getInternalOperations(query)
+      let unaryOperations = opUtils.getInternalUnaryOperations(query)
 
-      while (operations.length > 0) {
-        operations = opUtils.getInternalOperations(query)
+      console.log(unaryOperations)
 
-        operations.forEach(({ op, sub, relation }, i) => {
-          const queryTable = opUtils.executeOperation(op, sub ?? "", relation)
+      while (unaryOperations.length > 0) {
+        unaryOperations = opUtils.getInternalUnaryOperations(query)
+
+        console.log({ unaryOperations })
+
+        unaryOperations.forEach(({ op, sub, relation }, i) => {
+          let binaryOperations = opUtils.getInternalBinaryOperations(relation)
+
+          while (binaryOperations.length > 0) {
+            binaryOperations = opUtils.getInternalBinaryOperations(relation)
+
+            binaryOperations.forEach(
+              ({ op, relation1, relation2, sub1, sub2 }) => {
+                const queryTable = opUtils.executeBinaryOperation(
+                  op,
+                  relation1,
+                  relation2,
+                  sub1,
+                  sub2
+                )
+                // const binaryQueryRegex = new RegExp(
+                //   `${left}<${__CHR}${op}${__CHR}${right}\\(${relation}\\)`,
+                //   "g"
+                // )
+
+                // queryTables.lastQueryTable = queryTable
+                // queryTables.history = {
+                //   ...queryTables.history,
+                //   [`!${queryIndex}`]: queryTable,
+                // }
+
+                // relation = relation.replaceAll(
+                //   binaryQueryRegex,
+                //   `!${queryIndex}`
+                // )
+                queryIndex++
+              }
+            )
+
+            binaryOperations = []
+          }
+
+          const queryTable = opUtils.executeUnaryOperation(
+            op,
+            sub ?? "",
+            relation
+          )
           const subQueryRegex = new RegExp(
-            `${op}<sub>${__CHR}${sub}<\\/sub>\\(${relation}\\)|\\(!${queryIndex}\\)`,
+            `${op}<sub>${__CHR}${
+              sub === "*" ? "\\" : ""
+            }${sub}<\\/sub>\\(${relation}\\)|\\(!${queryIndex}\\)`,
             "g"
           )
 

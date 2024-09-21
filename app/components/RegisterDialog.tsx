@@ -41,6 +41,11 @@ export function RegisterDialog({
       }
     })
 
+    // find columns with auto increment
+    const autoIncrementColumns = dataColumns.filter(
+      (dataCol) => dataCol.type === "auto increment"
+    )
+
     const storedTables = JSON.parse(
       localStorage.getItem("@sql-algebra:tables") || "[]"
     )
@@ -49,6 +54,18 @@ export function RegisterDialog({
       const tableIndex = storedTables.findIndex(
         (table: TableType) => table.name === tableName
       )
+
+      autoIncrementColumns.forEach((autoIncrementColumn) => {
+        const lastAutoIncrement = storedTables[tableIndex].data.reduce(
+          (acc: number, row: TableType["data"][0]) => {
+            const value = parseInt(row[autoIncrementColumn.name], 10)
+            return value > acc ? value : acc
+          },
+          0
+        )
+
+        data[autoIncrementColumn.name] = (lastAutoIncrement + 1).toString()
+      })
 
       if (editRegisterId !== undefined) {
         storedTables[tableIndex].data[editRegisterId] = data
@@ -107,26 +124,32 @@ export function RegisterDialog({
 
         <form onSubmit={saveRegister} id="form-register">
           <div className="flex flex-wrap mt-6 gap-5">
-            {dataColumns.map((dataCol) => (
-              <div key={dataCol.name} className="flex flex-col">
-                <label htmlFor={dataCol.name} className="font-bold">
-                  {dataCol.name}:
-                </label>
-                <Input
-                  value={register[dataCol.name] ?? ""}
-                  onChange={(e) =>
-                    setRegister({ ...register, [dataCol.name]: e.target.value })
-                  }
-                  id={dataCol.name}
-                  name={dataCol.name}
-                  type={dataCol.type}
-                  placeholder={dataCol.defaultValue}
-                  autoComplete="off"
-                  required={!dataCol.nullable && !dataCol.defaultValue}
-                  className="flex"
-                />
-              </div>
-            ))}
+            {dataColumns.map(
+              (dataCol) =>
+                dataCol.type !== "auto increment" && (
+                  <div key={dataCol.name} className="flex flex-col">
+                    <label htmlFor={dataCol.name} className="font-bold">
+                      {dataCol.name}:
+                    </label>
+                    <Input
+                      value={register[dataCol.name] ?? ""}
+                      onChange={(e) =>
+                        setRegister({
+                          ...register,
+                          [dataCol.name]: e.target.value,
+                        })
+                      }
+                      id={dataCol.name}
+                      name={dataCol.name}
+                      type={dataCol.type}
+                      placeholder={dataCol.defaultValue}
+                      autoComplete="off"
+                      required={!dataCol.nullable && !dataCol.defaultValue}
+                      className="flex"
+                    />
+                  </div>
+                )
+            )}
           </div>
 
           <SheetClose className="flex mt-8" asChild>
